@@ -1,0 +1,19 @@
+[
+    {
+        "app": "example",
+        "scheme": "http",
+        "method": "GET",
+        "path": "/example",
+        "ip": "127.0.0.1",
+        "req-Date": "2016-10-10T23:00:00Z",
+        "req-Content-Length": 0,
+        "req-Content-Type": "application/json",
+        "Origin": "localhost",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
+        "status-code": 200,
+        "resp-Date": "2016-10-10T23:00:00Z",
+        "resp-time": 120,
+        "resp-Content-Length": 0,
+        "resp-Content-Type": "application/json"
+    }
+]

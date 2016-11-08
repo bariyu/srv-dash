@@ -14,7 +14,7 @@ class TestModels(unittest.TestCase):
             srr = HttpServerReqResp()
             pass
 
-        self.assertTrue('cannot create ServerReqResp obj missing required field' in str(context.exception))
+        self.assertTrue('missing required field' in str(context.exception))
 
 
 if __name__ == '__main__':
