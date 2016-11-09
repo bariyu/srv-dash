@@ -1,7 +1,7 @@
 import logging
 import json
 
-models_logger = logging.getLogger('models')
+models_logger = logging.getLogger()
 
 required_fields = [
     # app specific

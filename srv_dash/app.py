@@ -3,13 +3,16 @@ import ConfigParser
 import logging
 import json
 from functools import wraps
+from datetime import datetime
+from time import time
 
+from flask import Flask, abort, request, Response, g
+from tzlocal import get_localzone
 
-from flask import Flask, abort, request, Response
 from models import HttpServerReqResp
 from db import InfluxDBCli
 
-logging.basicConfig(format='%(asctime)s [%(threadName)16s][%(module)14s][%(levelname)8s] %(message)s')
+logging.basicConfig(format='%(asctime)s [%(threadName)16s][%(module)14s][%(levelname)8s] %(message)s', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger()
 
 app = Flask(__name__)
@@ -57,6 +60,37 @@ def add_data():
         return Response(response=json.dumps({'error': '%s' %(e)}),
                     status=400,
                     mimetype="application/json")
+
+
+@app.before_request
+def log_request():
+    g.req_start_time = time()
+    g.req_resp_meta_data = {
+        'app': 'srv-dash',
+        'scheme': 'http' if request.url.startswith('http://') else 'https',
+        'method': request.method,
+        'path': request.path,
+        'ip': request.remote_addr,
+        'req-Date': datetime.now(get_localzone()).isoformat(),
+        'req-Content-Length': int(request.headers.get('Content-Length', 0)) if type(request.headers.get('Content-Length')) == str else 0,
+        'req-Content-Type': request.headers.get('Content-Type'),
+        'Origin': request.headers.get('Origin', ''),
+        'User-Agent': request.headers.get('User-Agent'),
+    }
+
+
+@app.after_request
+def log_response(response):
+    response_meta_data = {
+        'status-code': response.status_code,
+        'resp-time': int((time() - g.req_start_time) * 1000),
+        'resp-Date': datetime.now(get_localzone()).isoformat(),
+        'resp-Content-Length': int(response.headers.get('Content-Length', 0)),
+        'resp-Content-Type': response.headers.get('Content-Type'),
+    }
+    g.req_resp_meta_data.update(response_meta_data)
+    process_data([g.req_resp_meta_data])
+    return response
 
 
 if __name__ == '__main__':
