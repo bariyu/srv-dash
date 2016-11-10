@@ -12,12 +12,15 @@ from tzlocal import get_localzone
 from models import HttpServerReqResp
 from db import InfluxDBCli
 
-logging.basicConfig(format='%(asctime)s [%(threadName)16s][%(module)14s][%(levelname)8s] %(message)s', stream=sys.stdout, level=logging.INFO)
-log = logging.getLogger()
-
 app = Flask(__name__)
 conf_parser = ConfigParser.ConfigParser()
 conf_parser.read("../config/srv-dash.ini")
+
+if conf_parser.get('server', 'debug'):
+    logging.basicConfig(format='%(asctime)s [%(threadName)16s][%(module)14s][%(levelname)8s] %(message)s', stream=sys.stdout, level=logging.DEBUG)
+else:
+    logging.basicConfig(format='%(asctime)s [%(threadName)16s][%(module)14s][%(levelname)8s] %(message)s', stream=sys.stdout, level=logging.INFO)
+log = logging.getLogger()
 
 db_cli = InfluxDBCli(
     conf_parser.get('influxdb', 'uri'),
