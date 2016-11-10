@@ -1,6 +1,8 @@
 import logging
 import json
 
+from dash.constants import HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME
+
 models_logger = logging.getLogger()
 
 required_fields = [
@@ -102,7 +104,7 @@ class HttpServerReqResp(object):
             elif key in fields:
                 fields_dict[key] = self._data[key]
         return {
-            'measurement': 'server_req_resp',
+            'measurement': HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME,
             'tags': tags_dict,
             'fields': fields_dict,
             'time': self._data['req-Date']
