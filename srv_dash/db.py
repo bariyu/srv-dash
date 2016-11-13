@@ -1,10 +1,12 @@
 import json
 import logging
 
-db_logger = logging.getLogger()
-
 from influxdb import InfluxDBClient
+
 from dash.metric_factory import MetricFactory
+from dash.constants import HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME
+
+db_logger = logging.getLogger()
 
 class InfluxDBCli(object):
     def __init__(self, host, port, username, password, db_name):
@@ -21,16 +23,22 @@ class InfluxDBCli(object):
             self.influx_client.query(metric_instance.get_continious_create_query(self.db_name))
             db_logger.debug('inited metric {}'.format(metric_instance.name))
 
+    def get_app_names(self):
+        result_set = self.influx_client.query('SHOW TAG VALUES WITH KEY = "app"')
+        tag_values = result_set.get_points(HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME)
+        return [tag.get('value') for tag in tag_values]
+
     def get_metric_names(self):
         return [metric_instance.name for metric_instance in self.metric_instances]
 
-    def get_all_metrics_data(self):
+    def get_metrics(self, app=None):
         metrics = {}
         for metric_instance in self.metric_instances:
-            result_set = self.influx_client.query(metric_instance.get_data_points_query())
-            #for data in result_set.get_points():
-            # print data
-            metrics[metric_instance.name] = result_set.get_points()
+            result_set = self.influx_client.query(metric_instance.get_data_points_query(app=app))
+            data_points = result_set.get_points(metric_instance.name)
+            metrics[metric_instance.name] = {
+                'data': [data_point for data_point in data_points],
+            }
         return metrics
 
     def save_data(self, obj_list):

@@ -15,5 +15,7 @@ class BaseMetric(object):
         return \
             'CREATE CONTINUOUS QUERY {} ON "{}"\nBEGIN\n\t{} GROUP BY time({}m), app\nEND'.format(self.name, db_name, self.get_continious_query_body(), self.calculate_period)
 
-    def get_data_points_query(self):
-        return 'SELECT * from {}'.format(self.name)
+    def get_data_points_query(self, app=None):
+        if not app:
+            return 'SELECT * from {}'.format(self.name)
+        return 'SELECT * from {} WHERE "app" = \'{}\''.format(self.name, app)

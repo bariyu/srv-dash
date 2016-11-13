@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
@@ -14,5 +15,13 @@ module.exports = {
                 }
             },
         ]
-    }
+    },
+    plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: './node_modules/@blueprintjs/core/dist/blueprint.css',
+                to: '../css/blueprint.css'
+            }
+        ]),
+    ]
 };

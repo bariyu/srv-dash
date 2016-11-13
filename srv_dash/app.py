@@ -4,7 +4,7 @@ import logging
 import json
 from functools import wraps
 from datetime import datetime
-from time import time
+from time import time, sleep
 
 from flask import Flask, abort, request, Response, g, render_template
 from tzlocal import get_localzone
@@ -65,9 +65,22 @@ def add_data():
                     mimetype="application/json")
 
 
+@app.route("/apps", methods=['GET'])
+def get_apps():
+    return Response(response=json.dumps({'apps': db_cli.get_app_names()}),
+                status=200,
+                mimetype="application/json")
+
+
+@app.route("/metrics/<app>", methods=['GET'])
+def get_metrics(app):
+    return Response(response=json.dumps({'metrics': db_cli.get_metrics(app)}),
+                status=200,
+                mimetype="application/json")
+
+
 @app.route("/", methods=['GET'])
 def index():
-    db_cli.get_all_metrics_data()
     return render_template('index.html')
 
 
