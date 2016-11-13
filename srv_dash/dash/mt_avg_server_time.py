@@ -7,3 +7,6 @@ class AverageServerTime(BaseMetric):
 
     def get_continious_query_body(self):
         return 'SELECT mean("resp-time") INTO "{}" FROM {}'.format(self.name, HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME)
+
+    def get_data_points_query(self):
+        return 'SELECT * from {}'.format(self.name)

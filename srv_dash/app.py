@@ -6,7 +6,7 @@ from functools import wraps
 from datetime import datetime
 from time import time
 
-from flask import Flask, abort, request, Response, g
+from flask import Flask, abort, request, Response, g, render_template
 from tzlocal import get_localzone
 
 from models import HttpServerReqResp
@@ -63,6 +63,12 @@ def add_data():
         return Response(response=json.dumps({'error': '%s' %(e)}),
                     status=400,
                     mimetype="application/json")
+
+
+@app.route("/", methods=['GET'])
+def index():
+    db_cli.get_all_metrics_data()
+    return render_template('index.html')
 
 
 @app.before_request
