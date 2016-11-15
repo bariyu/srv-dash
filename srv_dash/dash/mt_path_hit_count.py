@@ -10,3 +10,17 @@ class PathHitCountMetric(BaseMetric):
 
     def group_by_extra_tags(self):
         return ["path"]
+
+    def get_data_points_query(self, app=None):
+        if not app:
+            return 'SELECT * from {}'.format(self.name)
+        return 'SELECT * from {} WHERE "app" = \'{}\' GROUP BY "path"'.format(self.name, app)
+
+    def data_key(self):
+        return 'count'
+
+    def chart_type(self):
+        return 'linear'
+
+    def metric_title(self):
+        return '# of requests for a path'

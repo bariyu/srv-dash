@@ -1,6 +1,7 @@
 import {
     REQUEST_METRICS,
-    RECEIVE_METRICS
+    RECEIVE_METRICS,
+    CLEAR_METRICS
 } from '../constants';
 
 function requestMetrics(app) {
@@ -15,6 +16,20 @@ function receiveMetris(app, metrics) {
         type: RECEIVE_METRICS,
         app,
         metrics,
+    }
+}
+
+export function clearMetrics(app) {
+    return {
+        type: CLEAR_METRICS,
+        app
+    }
+}
+
+export function refreshMetrics(app) {
+    return dispatch => {
+        dispatch(clearMetrics(app));
+        dispatch(fetchMetrics(app));
     }
 }
 

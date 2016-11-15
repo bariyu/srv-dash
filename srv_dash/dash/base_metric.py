@@ -38,3 +38,15 @@ class BaseMetric(object):
         if not app:
             return 'SELECT * from {}'.format(self.name)
         return 'SELECT * from {} WHERE "app" = \'{}\''.format(self.name, app)
+
+    def data_key(self):
+        raise NotImplementedError
+
+    def chart_type(self):
+        raise NotImplementedError
+
+    def unit_name(self):
+        return ''
+
+    def metric_title(self):
+        return self.name

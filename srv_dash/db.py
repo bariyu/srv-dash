@@ -32,16 +32,39 @@ class InfluxDBCli(object):
         return [metric_instance.name for metric_instance in self.metric_instances]
 
     def get_metrics(self, app=None):
+        
+        def dict_to_key(d):
+            return ','.join(['%s: %s' %(key, str(d[key])) for key in d.keys()])
+
         metrics = {}
         for metric_instance in self.metric_instances:
             result_set = self.influx_client.query(metric_instance.get_data_points_query(app=app))
-            data_points = result_set.get_points(metric_instance.name)
+            items = result_set.items()
+            series = []
+
+            for item in items:
+                if item[0][1]:
+                    series.append({
+                        'name': dict_to_key(item[0][1]),
+                        'data': [data for data in item[1]],
+                    })
+                else:
+                    series.append({
+                        'name': item[0][0],
+                        'data': [data for data in item[1]]
+                    })
+
             metrics[metric_instance.name] = {
-                'data': [data_point for data_point in data_points],
+                'series': series,
+                'data_key': metric_instance.data_key(),
+                'chart_type': metric_instance.chart_type(),
+                'name': metric_instance.name,
+                'metric_title': metric_instance.metric_title(),
+                'unit_name': metric_instance.unit_name()
             }
         return metrics
 
     def save_data(self, obj_list):
         json_body = [obj.serialize_to_influx_json() for obj in obj_list]
         self.influx_client.write_points(json_body)
-        db_logger.debug('wrote new data point to influx')
+        db_logger.debug('wrote new data points to influx')
