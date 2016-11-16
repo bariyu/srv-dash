@@ -95,7 +95,7 @@ def log_request():
         'ip': request.remote_addr,
         'req-Date': datetime.now(get_localzone()).isoformat(),
         'req-Content-Length': int(request.headers.get('Content-Length', 0)) if type(request.headers.get('Content-Length')) == str else 0,
-        'req-Content-Type': request.headers.get('Content-Type'),
+        'req-Content-Type': request.headers.get('Content-Type', ''),
         'Origin': request.headers.get('Origin', ''),
         'User-Agent': request.headers.get('User-Agent'),
     }
@@ -108,7 +108,7 @@ def log_response(response):
         'resp-time': int((time() - g.req_start_time) * 1000),
         'resp-Date': datetime.now(get_localzone()).isoformat(),
         'resp-Content-Length': int(response.headers.get('Content-Length', 0)),
-        'resp-Content-Type': response.headers.get('Content-Type'),
+        'resp-Content-Type': response.headers.get('Content-Type', ''),
     }
     g.req_resp_meta_data.update(response_meta_data)
     process_data([g.req_resp_meta_data])
