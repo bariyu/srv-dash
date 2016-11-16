@@ -33,7 +33,7 @@ db_cli = InfluxDBCli(
 def check_auth(func):
     @wraps(func)
     def decorated(*args, **kwargs):
-        auth_enabled = conf_parser.get('auth', 'enabled')
+        auth_enabled = conf_parser.getboolean('auth', 'enabled')
         auth_key = None
         if auth_enabled:
             auth_key = conf_parser.get('auth', 'auth-key')
