@@ -27,5 +27,6 @@ module.exports = {
                 to: '../css/assets/'
             },
         ]),
-    ]
+    ],
+    devtool: 'source-map',
 };
