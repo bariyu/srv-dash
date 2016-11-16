@@ -21,7 +21,11 @@ module.exports = {
             {
                 from: './node_modules/@blueprintjs/core/dist/blueprint.css',
                 to: '../css/blueprint.css'
-            }
+            },
+            {
+                from: './node_modules/@blueprintjs/core/dist/assets/',
+                to: '../css/assets/'
+            },
         ]),
     ]
 };
