@@ -4,3 +4,4 @@ import mt_avg_server_time
 import mt_path_hit_count
 import mt_98_perc_server_time
 import mt_status_code_distribution
+import mt_slowest_paths
