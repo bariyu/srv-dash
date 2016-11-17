@@ -104,7 +104,7 @@ export default class LinearChart extends BaseChart {
                 }
                 tooltipAnchor.attr({
                     cx: closest.position.x,
-                    cy: closest.position.y,
+                    cy: closest.position.y + window.pageYOffset,
                     "data-original-title": `${formatTooltipValue(closest.datum[data_key])} ${unit_name} ${closestSerieNameLabel}`
                 });
                 tooltipAnchor.tooltip("show");
@@ -122,7 +122,7 @@ export default class LinearChart extends BaseChart {
         const { chartData } = this.props;
         const { name } = chartData;
         return (
-            <svg id={name} />
+            <svg id={name} height="300"/>
         )
     }
 }
