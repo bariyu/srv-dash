@@ -32,7 +32,7 @@ class AppsPage extends React.Component {
                 <h4>
                     Select an application below to see its dashboard.
                 </h4>
-                <div className="flex-box justify-content-space-between">
+                <div className="flex-box justify-content-flex-start">
                     {appCards}
                 </div>
             </div>
