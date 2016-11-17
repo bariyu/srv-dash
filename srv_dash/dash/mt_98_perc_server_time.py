@@ -19,3 +19,6 @@ class Perc98ServerTimeMetric(BaseMetric):
 
     def metric_title(self):
         return '98th percentile server response time'
+
+    def get_data_points_query(self, app=None):
+        return self.get_basic_data_points_query(app=app)

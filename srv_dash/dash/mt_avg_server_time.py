@@ -19,3 +19,6 @@ class AverageServerTimeMetric(BaseMetric):
 
     def metric_title(self):
         return 'average server response time for all requests'
+
+    def get_data_points_query(self, app=None):
+        return self.get_basic_data_points_query(app=app)

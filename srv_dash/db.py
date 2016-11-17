@@ -32,27 +32,10 @@ class InfluxDBCli(object):
         return [metric_instance.name for metric_instance in self.metric_instances]
 
     def get_metrics(self, app=None):
-        
-        def dict_to_key(d):
-            return ','.join(['%s: %s' %(key, str(d[key])) for key in d.keys()])
-
         metrics = {}
-        for metric_instance in self.metric_instances:
-            result_set = self.influx_client.query(metric_instance.get_data_points_query(app=app))
-            items = result_set.items()
-            series = []
 
-            for item in items:
-                if item[0][1]:
-                    series.append({
-                        'name': dict_to_key(item[0][1]),
-                        'data': [data for data in item[1]],
-                    })
-                else:
-                    series.append({
-                        'name': item[0][0],
-                        'data': [data for data in item[1]]
-                    })
+        for metric_instance in self.metric_instances:
+            series = metric_instance.get_series(self.influx_client, app=app)
 
             metrics[metric_instance.name] = {
                 'series': series,
