@@ -122,7 +122,7 @@ export default class LinearChart extends BaseChart {
         const { chartData } = this.props;
         const { name } = chartData;
         return (
-            <svg id={name} height="300"/>
+            <svg id={name} height="300" style={{width: '90%'}}/>
         )
     }
 }
