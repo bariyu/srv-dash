@@ -1,6 +1,7 @@
 # project specific
 node_modules/
 bundle.js
+bundle.js.map
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
