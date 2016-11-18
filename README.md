@@ -1,6 +1,9 @@
 # srv-dash
 srv-dash is a dashboard that helps you monitor your servers stats/performance. It does this by exposing a REST API. What you have to do is providing your server logs constantly to srv-dash via the REST API.
 
+# DEMO
+http://srv-dash.bkucukguzel.me
+
 ### Requirements
 - influxdb >= 1.0
 - Python => 2.7 (I have never tested with python 3+)
