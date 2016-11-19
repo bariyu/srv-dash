@@ -36,8 +36,15 @@ export function refreshMetrics(app) {
 export function fetchMetrics(app) {
     return dispatch => {
         dispatch(requestMetrics(app));
-        return fetch(`/metrics/${app}`)
-            .then(response => response.json())
-            .then(json => dispatch(receiveMetris(app, json.metrics)));
+        $.ajax({
+            url: `/metrics/${app}`,
+            type: "GET",
+            success: function (data) {
+                dispatch(receiveMetris(app, data.metrics));
+            },
+            error: function () {
+                alert("failed to get metrics");
+            }
+        });
     }
 }

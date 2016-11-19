@@ -19,8 +19,15 @@ function receiveApps(apps) {
 export function fetchApps() {
     return dispatch => {
         dispatch(requestApps());
-        return fetch(`/apps`)
-            .then(response => response.json())
-            .then(json => dispatch(receiveApps(json.apps)));
+        $.ajax({
+            url: '/apps',
+            type: "GET",
+            success: function (data) {
+                dispatch(receiveApps(data.apps));
+            },
+            error: function () {
+                alert("failed to get apps");
+            }
+        });    
     }
 }
