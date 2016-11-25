@@ -13,13 +13,13 @@ class PathHitCountMetric(BaseMetric):
 
     def get_data_points_query(self, app=None):
         if not app:
-            return 'SELECT * from {} GROUP BY "path"'.format(self.name)
-        return 'SELECT * from {} WHERE "app" = \'{}\' GROUP BY "path"'.format(self.name, app)
+            return 'SELECT * from {} WHERE time > now() - {}d GROUP BY "path"'.format(self.name, self.last_days)
+        return 'SELECT * from {} WHERE time > now() - {}d and "app" = \'{}\' GROUP BY "path"'.format(self.name, self.last_days,app)
 
     def get_data_points_query_for_a_path(self, path, app=None):
         if not app:
-            return 'SELECT * from {} WHERE "path" = \'{}\''.format(self.name, path)
-        return 'SELECT * from {} WHERE "app" = \'{}\' AND "path" = \'{}\''.format(self.name, app, path)
+            return 'SELECT * from {} WHERE time > now() - {}d and "path" = \'{}\''.format(self.name, self.last_days, path)
+        return 'SELECT * from {} WHERE time > now() - {}d and "app" = \'{}\' AND "path" = \'{}\''.format(self.name, self.last_days, app, path)
 
     def data_key(self):
         return 'count'
@@ -32,8 +32,8 @@ class PathHitCountMetric(BaseMetric):
 
     def sum_query(self, app=None):
         if not app:
-            return 'SELECT SUM("count") from {} GROUP BY "path"'.format(self.name)
-        return 'SELECT SUM("count") from {} WHERE "app" = \'{}\' GROUP BY "path"'.format(self.name, app)
+            return 'SELECT SUM("count") from {} WHERE time > now() - {}d GROUP BY "path"'.format(self.name, self.last_days)
+        return 'SELECT SUM("count") from {} WHERE time > now() - {}d and "app" = \'{}\' GROUP BY "path"'.format(self.name, self.last_days, app)
 
     def max_different_path(self):
         return 5

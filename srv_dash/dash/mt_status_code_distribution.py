@@ -25,5 +25,5 @@ class StatusCodeDistributionMetric(BaseMetric):
 
     def get_data_points_query(self, app=None):
         if not app:
-            return 'SELECT * from {} GROUP BY "status-code" = \'{}\''.format(self.name)
-        return 'SELECT * from {} WHERE "app" = \'{}\' GROUP BY "status-code"'.format(self.name, app)
+            return 'SELECT * from {} WHERE time > now() - {}d GROUP BY "status-code" = \'{}\''.format(self.name, self.last_days)
+        return 'SELECT * from {} WHERE time > now() - {}d and "app" = \'{}\' GROUP BY "status-code"'.format(self.name, self.last_days, app)

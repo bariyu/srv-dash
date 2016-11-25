@@ -1,12 +1,14 @@
 from constants import HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME
 
 class BaseMetric(object):
-    def __init__(self, name, calculate_period=1):
+    def __init__(self, name, calculate_period=1, last_days=3):
         """
-            time_interval is in minutes
+            calculate_period is in minutes
+            last_days in days
         """
         self.name = name
         self.calculate_period = calculate_period
+        self.last_days = last_days
 
     def get_continious_query_body(self):
         raise NotImplementedError
@@ -36,8 +38,8 @@ class BaseMetric(object):
 
     def get_basic_data_points_query(self, app=None):
         if not app:
-            return 'SELECT * from {}'.format(self.name)
-        return 'SELECT * from {} WHERE "app" = \'{}\''.format(self.name, app)
+            return 'SELECT * from {} WHERE time > now() - {}d'.format(self.name, self.last_days)
+        return 'SELECT * from {} WHERE time > now() - {}d and "app" = \'{}\''.format(self.name, self.last_days, app)
 
     def get_data_points_query(self, app=None):
         raise NotImplementedError
