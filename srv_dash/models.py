@@ -1,5 +1,8 @@
 import logging
 import json
+from datetime import datetime
+
+from tzlocal import get_localzone
 
 from dash.constants import HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME
 
@@ -107,5 +110,5 @@ class HttpServerReqResp(object):
             'measurement': HTTP_SERVER_REQ_RESP_MEASUREMENT_NAME,
             'tags': tags_dict,
             'fields': fields_dict,
-            'time': self._data['req-Date']
+            'time': datetime.now(get_localzone()).isoformat()
         }
